@@ -1,0 +1,26 @@
+Tema1a - APD
+Bobelniceanu Darius-Andrei
+331CC
+
+    Pentru acest proiect am avut de implementat paradigma Map-Reduce
+pentru a procesa cuvintele unei arhive de fisiere text impartite pe
+capitole ce insumeaza continutul unor carti/publicatii, impartindu-le
+in mai multe fisiere text pe care le-am creat in prealabil. M-am folosit
+de metoda de multithreading pentru a procesa aceste fisiere in paralel.
+Pentru aceasta, am implementat MapThread si ReduceThread, ce functioneaza:
+    - Mapperi: proceseaza fisiere text dintr-o lista data, extrag cuvintele,
+    le transforma in lowercase si elimina caracterele speciale (non-alfabetice)
+    si inregistreaza pozitiile lor (id-ul fisierului). Rezultatele sunt stocate
+    intr-o structura comuna protejata de mutex.
+    - Reducer: proceseaza cuvintele impartite pe litere si le sorteaza in ordinea
+    aparitiei in fisiere, insumand numarul de aparitii si pozitiile lor. Rezultatele
+    sunt stocate intr-o structura comuna protejata de mutex.
+Sincronizarea mapperilor si reducerilor se face cu ajutorul unei bariere pentru
+a se asiugra ca toti mapperii au terminat de procesat fisierele inainte de a
+incepe procesarea reducerilor. Aceasta este amplasata in interiorul functiei mapper, la
+finalul procesarii fisierelor. Inainte de a incepe procesarea reducerilor, se asteapta
+ca toti mapperii sa fi terminat de procesat fisierele. Am pus ambele tipuri de threaduri
+inrt-un singur array (ce are ca dimensiune suma numarului de reduceri si mapperi), pentru ca acestea sa dea join pe o singura iteratie de for (pentru
+a respecta precizarea din cerinta). Am folosit mutex-uri pentru a proteja structurile
+comune de date si pentru a asigura sincronizarea threadurilor. La final, am eliberat resursele.
+
